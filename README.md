@@ -32,20 +32,22 @@ window.RPGAtsumaru.scoreboards
 });
 
 
-スコアボードへの記録
-メソッド	window.RPGAtsumaru.scoreboards.setRecord(boardId: number, score: number)
-説明	引数の boardId を指定することによりスコアを記録するスコアボードを指定。※現状は非対応です
-第2引数のscoreでスコアを指定し、記録するスコアの点数を記録。
-引数	
-スコアボードID(デフォルトは1〜10までの整数)
-記録するスコアの点数。スコアの値としてゲームアツマールがサポートしている範囲は -999,999,999,999,999 ～ +999,999,999,999,999 です。　※現状は特に設定していません
-戻り値	Promise<void>
+| スコアボードへの記録 | |
+| ---- | ---- |
+|メソッド | 	window.RPGAtsumaru.scoreboards.setRecord(boardId: number, score: number) |
+| 説明	| 引数の boardId を指定することによりスコアを記録するスコアボードを指定。※現状は非対応です<br> 第2引数のscoreでスコアを指定し、記録するスコアの点数を記録。 |
+| 引数 | スコアボードID(デフォルトは1〜10までの整数)記録するスコアの点数。<br>スコアの値としてゲームアツマールがサポートしている範囲は -999,999,999,999,999 ～ +999,999,999,999,999 です。　※現状は特に設定していません |
+| 戻り値 |	Promise\<void> |
 
-スコアボードを表示する
-メソッド	window.RPGAtsumaru.scoreboards.display(boardId: number)
-説明	引数の boardId を指定することによりスコアを記録するスコアボードを指定してスコアボード表示
-引数	スコアボードID(デフォルトは1〜10までの整数)　※現状未作成
-戻り値	Promise<void>
+<br>
+<br>
+
+| スコアボードを表示する | |
+| ---- | ---- |
+| メソッド |	window.RPGAtsumaru.scoreboards.display(boardId: number) |
+| 説明	| 引数の boardId を指定することによりスコアを記録するスコアボードを指定してスコアボード表示 |
+| 引数 |スコアボードID(デフォルトは1〜10までの整数)　※現状未作成 |
+| 戻り値 |	Promise\<void> |
 
 
 
