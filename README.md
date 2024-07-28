@@ -1,53 +1,69 @@
-# アツマール避難所(仮)用のAPI
+# アツマール避難所(仮) API ドキュメント
 
-アツマール避難所(仮)用のAPI群です。
-現状はスコアボードのみです。
+## 概要
 
-## 特徴
+このドキュメントは、「アツマール避難所(仮)」で提供されるスコアボード機能を利用するためのJavaScript APIについて説明します。このAPIを使用することで、スコアの記録や表示を親ウィンドウに送信することができます。本APIは、前身であるRPGアツマールのAPIを模して設計されていますが、現在提供されている機能はスコアボードのみです。
 
-- スコアボードにスコアを送信します
+## メソッド
 
-## 必要要件
+### `setRecord(recordKey, recordValue)`
 
-- HTML5で作成されたゲーム
+指定されたスコアボードIDとスコアの値でスコアを設定します。
 
-## インストール方法
+#### パラメータ
 
-- 対象のゲームのindex.html のあるディレクトリに rpgatsumaru.jsを配置します。
-- index.htmlのヘッダー部分に <script src="rpgatsumaru.js"></script> と記載します。
+- `recordKey` (number): スコアボードのID。1から10の数値を想定しています。
+- `recordValue` (number): 記録するスコアの値。
 
-- AkashicEngineを使用したゲームの場合はscriptフォルダにrpgatsumaru.jsを配置し、akashic scan assetを行うだけで適応できます。
+#### 戻り値
 
-## ゲームのスクリプトに組み込む例
-- 対象のゲームのjavascriptに下記のようにコードを追加します。
-- ゲームアツマール用のスコアボードへの送信を実装している場合は変更なしで動くと思います
-ただし公式で削除予定だった experimental がついている場合には対応していないので削ってください
-- 現状、ボードIDに対応できていないのですべて１つのランキングとなってしまっております
-  
+- `Promise`: 操作が完了すると解決されるプロミス。5秒以内に応答がない場合は拒否されます。
 
-window.RPGAtsumaru.scoreboards
-.setRecord(1, score)
-.then(function() {
+#### 使用例
+
+```javascript
+window.RPGAtsumaru.scoreboards.setRecord(1, 1000)
+  .then(function() {
     window.RPGAtsumaru.scoreboards.display(1);
-});
+  })
+  .catch(function(error) {
+    console.error("スコアの設定に失敗しました", error);
+  });
+```
 
+### `display(recordKey)`
 
-| スコアボードへの記録 | |
-| ---- | ---- |
-|メソッド | 	window.RPGAtsumaru.scoreboards.setRecord(boardId: number, score: number) |
-| 説明	| 引数の boardId を指定することによりスコアを記録するスコアボードを指定。※現状は非対応です<br> 第2引数のscoreでスコアを指定し、記録するスコアの点数を記録。 |
-| 引数 | スコアボードID(デフォルトは1〜10までの整数)記録するスコアの点数。<br>スコアの値としてゲームアツマールがサポートしている範囲は -999,999,999,999,999 ～ +999,999,999,999,999 です。　※現状は特に設定していません |
-| 戻り値 |	Promise\<void> |
+指定されたスコアボードIDのスコアを表示します。
 
-<br>
-<br>
+#### パラメータ
 
-| スコアボードを表示する | |
-| ---- | ---- |
-| メソッド |	window.RPGAtsumaru.scoreboards.display(boardId: number) |
-| 説明	| 引数の boardId を指定することによりスコアを記録するスコアボードを指定してスコアボード表示 |
-| 引数 |スコアボードID(デフォルトは1〜10までの整数)　※現状未作成 |
-| 戻り値 |	Promise\<void> |
+- `recordKey` (number): スコアボードのID。1から10の数値を想定しています。
 
+#### 使用例
 
+```javascript
+window.RPGAtsumaru.scoreboards.display(1);
+```
 
+## 内部仕様について
+
+### メッセージ送信
+
+- `setRecord` メソッドは、指定された `recordKey` と `recordValue` を含むメッセージを `postMessage` を使って親ウィンドウに送信します。
+- 親ウィンドウからの `setRecordResponse` メッセージを受信するとプロミスが解決されます。
+
+### タイムアウト処理
+
+- `setRecord` メソッドは、5秒以内に応答がない場合にタイムアウトエラーとしてプロミスを拒否します。
+
+## 注意事項
+
+- 親ウィンドウとの通信には `postMessage` を使用します。
+- `setRecord` メソッドはプロミスを返し、5秒以内に応答がない場合はタイムアウトエラーとしてプロミスが拒否されます。
+- `display` メソッドは指定されたスコアボードIDのスコアを親ウィンドウに表示するように指示します。
+
+## その他の情報
+
+### RPGアツマール API との比較
+
+RPGアツマールのAPIは、スコアボード機能以外にも多くの機能を提供していました。しかし、現在の「アツマール避難所(仮)」では、スコアボード機能のみが提供されています。将来的に他の機能も追加される可能性がありますが、現時点ではスコアボード機能に限定されています。
